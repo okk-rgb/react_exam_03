@@ -1,0 +1,56 @@
+.topbar {
+  background-color: var(--light-gray-bg);
+  border-bottom: 1px solid var(--border-color);
+  font-size: 13px;
+  color: var(--text-gray);
+  padding: 8px 0;
+}
+
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar-left, .topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.topbar-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topbar-item a {
+  color: var(--text-main);
+  transition: color 0.2s;
+}
+.topbar-item a:hover {
+  color: var(--primary-orange);
+}
+
+.topbar-left .topbar-item:first-child span {
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+.icon {
+  font-size: 16px;
+  color: var(--text-gray);
+}
+
+.language-selector {
+  cursor: pointer;
+  color: var(--text-main);
+  font-weight: 500;
+}
+.language-selector img {
+  width: 18px;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
