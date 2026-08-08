@@ -5,12 +5,11 @@ import { FaHeart } from 'react-icons/fa';
 import { FiHeart } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 
-const CatalogDatas = ({ add }) => {
-  const [favorites, setFavorites] = useState([]);
+const CatalogDatas = ({ add, favorites = [], toggleFavorite }) => {
 
-
-
-  const addToCart = (item) => {
+  const addToCart = (e, item) => {
+      e.preventDefault();
+      e.stopPropagation();
       add(item)
       // alert
       let timerInterval;
@@ -23,7 +22,7 @@ const CatalogDatas = ({ add }) => {
       Swal.showLoading();
       const timer = Swal.getPopup().querySelector("b");
       timerInterval = setInterval(() => {
-        timer.textContent = `${Swal.getTimerLeft()}`;
+        if (timer) timer.textContent = `${Swal.getTimerLeft()}`;
       }, 100);
     },
     willClose: () => {
@@ -34,18 +33,15 @@ const CatalogDatas = ({ add }) => {
     if (result.dismiss === Swal.DismissReason.timer) console.log("I was closed by the timer");
   });
   
-  
       console.log('ishladi');
-      
     }
 
+  const isFavorite = (item) => favorites.some((fav) => fav.id === item.id);
 
-  const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id]
-    );
+  const handleFavoriteClick = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(item);
   };
 
 
@@ -58,11 +54,11 @@ const CatalogDatas = ({ add }) => {
                   {/* Favorite Button */}
                   <button
                     className={`favorite-btn ${
-                      favorites.includes(item.id) ? 'active' : ''
+                      isFavorite(item) ? 'active' : ''
                     }`}
-                    onClick={() => toggleFavorite(item.id)}
+                    onClick={(e) => handleFavoriteClick(e, item)}
                   >
-                    {favorites.includes(item.id) ? <FaHeart /> : <FiHeart />}
+                    {isFavorite(item) ? <FaHeart /> : <FiHeart />}
                   </button>
       
                   {/* Product Image */}
@@ -76,7 +72,7 @@ const CatalogDatas = ({ add }) => {
       
                     <div className="card-footer">
                       <span className="price">${item.price}</span>
-                      <button onClick={() => addToCart(item)} className="add-btn">Savatga qo'shish +</button>
+                      <button onClick={(e) => addToCart(e, item)} className="add-btn">Savatga qo'shish +</button>
                     </div>
                   </div>
                 </Link>
@@ -85,5 +81,6 @@ const CatalogDatas = ({ add }) => {
     </section>
   )
 }
+
 
 export default CatalogDatas

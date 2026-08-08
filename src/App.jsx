@@ -14,9 +14,11 @@ import { useState } from 'react';
 // import { caytalogueData } from './mock/catalog';
 import CatalogDatas from './components/CatalogDatas';
 import CradInfo from './components/CradInfo';
+import SearchResults from './components/SearchResults';
 
 function App() {
   const [addCart, setAddCart] = useState([])
+  const [favorites, setFavorites] = useState([])
 
   const add = (pros) => {
     setAddCart((asad)=> [...asad,pros])
@@ -24,32 +26,41 @@ function App() {
 
   const cartDelete = (remove) => {
     setAddCart((bobur)=> bobur.filter((asad, index) => index !== remove))
-    
   }
-    return (
+
+  const toggleFavorite = (item) => {
+    setFavorites((prev) => {
+      const exists = prev.some((fav) => fav.id === item.id);
+      if (exists) {
+        return prev.filter((fav) => fav.id !== item.id);
+      } else {
+        return [...prev, item];
+      }
+    });
+  };
+
+  return (
     <div className="app-main">
       <TopBar />
       <div className="container">
-        <MainHeader />
+        <MainHeader cartCount={addCart.length} favoritesCount={favorites.length} />
         <NavBar />
         <Routes>
-          <Route path='/' element={<Home add={add}/>}/>
+          <Route path='/' element={<Home add={add} favorites={favorites} toggleFavorite={toggleFavorite} />} />
           <Route path='cart' element={<Carts remove={cartDelete} carts={addCart}/>}/>
-          <Route path='/favourites' element={<Favourite/>}/>
-          <Route path='/catalog_datas' element={<CatalogDatas add={add}/>}/>
-          <Route path='/card/:id' element={<CradInfo add={add}/>}/>
-
+          <Route path='/favourites' element={<Favourite favorites={favorites} toggleFavorite={toggleFavorite} add={add} />} />
+          <Route path='/catalog_datas' element={<CatalogDatas add={add} favorites={favorites} toggleFavorite={toggleFavorite} />} />
+          <Route path='/card/:id' element={<CradInfo add={add} favorites={favorites} toggleFavorite={toggleFavorite} />} />
+          <Route path='/search' element={<SearchResults add={add} favorites={favorites} toggleFavorite={toggleFavorite} />} />
         </Routes>
         {/* <HeroBanner />
         <QuickCategories />
         <DealsSection/> */}
       </div>
       <FloatingActions />
-
-    
-      
     </div>
   )
 }
+
 
 export default App;

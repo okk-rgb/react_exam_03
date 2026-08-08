@@ -16,13 +16,15 @@
           :
           ( <div className="added_items">
             {carts.map((item, index) => (
-  <div key={index} className="items_card">
-    <img src={item.img} alt={item.name} style={{ width: '100px' }} />
-    <h2>{item.name}</h2>
-    <p>{item.price} $</p>
-    <button onClick={() => remove(index)}><CiTrash /> Olib Tashlash</button>
-  </div>
-))}
+              <div key={index} className="items_card">
+                <Link to={`/card/${item.id}`} style={{ display: 'contents', color: 'inherit', textDecoration: 'none' }}>
+                  <img src={item.img} alt={item.name} style={{ width: '100px' }} />
+                  <h2>{item.name}</h2>
+                </Link>
+                <p>{item.price} $</p>
+                <button onClick={() => remove(index)}><CiTrash /> Olib Tashlash</button>
+              </div>
+            ))}
           </div>
           ) }
         </div>

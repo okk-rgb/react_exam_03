@@ -6,45 +6,48 @@ import { caytalogueData } from '../mock/catalog';
 import Swal from 'sweetalert2'
 import { Link } from 'react-router-dom';
 
-const DealsSection = ({ childAdd }) => {
+const DealsSection = ({ childAdd, favorites = [], toggleFavorite }) => {
   const featuredDeals = caytalogueData;
-  const [favorites, setFavorites] = useState([]);
 
   const add = (item) => {
     childAdd(item)
     // alert
     let timerInterval;
-Swal.fire({
-  title: "Savatga Qo`shildi",
-  // html: "I will close in <b></b> milliseconds.",
-  timer: 400,
-  timerProgressBar: true,
-  didOpen: () => {
-    Swal.showLoading();
-    const timer = Swal.getPopup().querySelector("b");
-    timerInterval = setInterval(() => {
-      timer.textContent = `${Swal.getTimerLeft()}`;
-    }, 100);
-  },
-  willClose: () => {
-    clearInterval(timerInterval);
-  }
-}).then((result) => {
-  /* Read more about handling dismissals below */
-  if (result.dismiss === Swal.DismissReason.timer) console.log("I was closed by the timer");
-});
-
+    Swal.fire({
+      title: "Savatga Qo`shildi",
+      // html: "I will close in <b></b> milliseconds.",
+      timer: 400,
+      timerProgressBar: true,
+      didOpen: () => {
+        Swal.showLoading();
+        const timer = Swal.getPopup().querySelector("b");
+        timerInterval = setInterval(() => {
+          if (timer) timer.textContent = `${Swal.getTimerLeft()}`;
+        }, 100);
+      },
+      willClose: () => {
+        clearInterval(timerInterval);
+      }
+    }).then((result) => {
+      /* Read more about handling dismissals below */
+      if (result.dismiss === Swal.DismissReason.timer) console.log("I was closed by the timer");
+    });
 
     console.log('ishladi');
-    
   }
 
-  const toggleFavorite = (id) => {
-    setFavorites((prev) =>
-      prev.includes(id)
-        ? prev.filter((item) => item !== id)
-        : [...prev, id]
-    );
+  const isFavorite = (item) => favorites.some((fav) => fav.id === item.id);
+
+  const handleFavoriteClick = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(item);
+  };
+
+  const handleAddToCart = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    add(item);
   };
 
   return (
@@ -63,11 +66,11 @@ Swal.fire({
             {/* Favorite Button */}
             <button
               className={`favorite-btn ${
-                favorites.includes(item.id) ? 'active' : ''
+                isFavorite(item) ? 'active' : ''
               }`}
-              onClick={() => toggleFavorite(item.id)}
+              onClick={(e) => handleFavoriteClick(e, item)}
             >
-              {favorites.includes(item.id) ? <FaHeart /> : <FiHeart />}
+              {isFavorite(item) ? <FaHeart /> : <FiHeart />}
             </button>
 
             {/* Product Image */}
@@ -81,7 +84,7 @@ Swal.fire({
 
               <div className="card-footer">
                 <span className="price">${item.price}</span>
-                <button onClick={() => add(item)} className="add-btn">Savatga qo'shish +</button>
+                <button onClick={(e) => handleAddToCart(e, item)} className="add-btn">Savatga qo'shish +</button>
               </div>
             </div>
           </Link>
@@ -90,5 +93,6 @@ Swal.fire({
     </section>
   );
 };
+
 
 export default DealsSection;

@@ -1,10 +1,20 @@
 import './MainHeader.css';
 import { FiSearch, FiShoppingCart, FiHeart, FiUser } from 'react-icons/fi';
 import { BsGridFill } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { staticData } from '../mock/data';
+import { useState } from 'react';
 
-const MainHeader = () => {
+const MainHeader = ({ cartCount = 0, favoritesCount = 0 }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <header className="main-header">
       <Link to={'/'}><div className="logo-section">
@@ -61,8 +71,16 @@ const MainHeader = () => {
       </button>
 
       <div className="search-bar">
-        <input type="text" placeholder="Mahsulotlarni izlash..." />
-        <button className="search-btn">
+        <input 
+          type="text" 
+          placeholder="Mahsulotlarni izlash..." 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSearch();
+          }}
+        />
+        <button onClick={handleSearch} className="search-btn">
           <FiSearch />
         </button>
       </div>
@@ -70,11 +88,11 @@ const MainHeader = () => {
       <div className="header-actions">
         <div className="action-item">
           <Link to={'/cart'}><FiShoppingCart className="action-icon" /></Link>
-          <span>Savat</span>
+          <span>Savat ({cartCount})</span>
         </div>
         <div className="action-item">
           <Link to={'/favourites'}><FiHeart className="action-icon" /></Link>
-          <span>Sevimililar</span>
+          <span>Sevimililar ({favoritesCount})</span>
         </div>
         <div className="action-item">
           <FiUser className="action-icon" />
@@ -84,5 +102,6 @@ const MainHeader = () => {
     </header>
   );
 };
+
 
 export default MainHeader;

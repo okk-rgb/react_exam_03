@@ -1,11 +1,22 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import './Favourite.css'
+import { useSearchParams, Link } from 'react-router-dom';
+import { caytalogueData } from '../mock/catalog';
 import Swal from 'sweetalert2';
 import { FaHeart } from 'react-icons/fa';
-import './DealsSection.css';
+import { FiHeart } from 'react-icons/fi';
+import './SearchResults.css';
 
-const Favourite = ({ favorites = [], toggleFavorite, add }) => {
+const SearchResults = ({ add, favorites, toggleFavorite }) => {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('q') || '';
+
+  // Filter items match name or category (case-insensitive)
+  const filtered = caytalogueData.filter((item) =>
+    item.name.toLowerCase().includes(query.toLowerCase()) ||
+    item.category.toLowerCase().includes(query.toLowerCase())
+  );
+
+  const isFavorite = (item) => favorites.some((fav) => fav.id === item.id);
+
   const handleFavoriteClick = (e, item) => {
     e.preventDefault();
     e.stopPropagation();
@@ -23,7 +34,6 @@ const Favourite = ({ favorites = [], toggleFavorite, add }) => {
       timer: 400,
       timerProgressBar: true,
       didOpen: () => {
-        Swal.showLoading();
         const timer = Swal.getPopup().querySelector("b");
         timerInterval = setInterval(() => {
           if (timer) timer.textContent = `${Swal.getTimerLeft()}`;
@@ -36,26 +46,27 @@ const Favourite = ({ favorites = [], toggleFavorite, add }) => {
   };
 
   return (
-    <div className="fav-container">
-      <h2 className="fav-title">Mening sevimlilarim</h2>
-      
-      {favorites.length === 0 ? (
-        <div className="empty-fav-view">
-          <h3 className="empty-fav-title">Sevimlilar hozircha bo'sh</h3>
-          <Link to="/" className="home-btn">
-            Bosh sahifa
-          </Link>
+    <section className="search-results-section">
+      <h2 className="search-results-title">
+        Qidiruv natijalari: "{query}"
+      </h2>
+
+      {filtered.length === 0 ? (
+        <div className="no-results">
+          <h3>Mahsulotlar topilmadi</h3>
+          <p>Kechirasiz, so'rovingizga mos mahsulot topilmadi.</p>
+          <Link to="/" className="home-btn">Bosh sahifa</Link>
         </div>
       ) : (
         <div className="deals-grid">
-          {favorites.map((item) => (
+          {filtered.map((item) => (
             <Link className="deal-card" key={item.id} to={`/card/${item.id}`}>
               {/* Favorite Button */}
               <button
-                className="favorite-btn active"
+                className={`favorite-btn ${isFavorite(item) ? 'active' : ''}`}
                 onClick={(e) => handleFavoriteClick(e, item)}
               >
-                <FaHeart />
+                {isFavorite(item) ? <FaHeart /> : <FiHeart />}
               </button>
 
               {/* Product Image */}
@@ -66,7 +77,6 @@ const Favourite = ({ favorites = [], toggleFavorite, add }) => {
               {/* Card Info */}
               <div className="card-info">
                 <h3 className="category">{item.name}</h3>
-
                 <div className="card-footer">
                   <span className="price">${item.price}</span>
                   <button onClick={(e) => handleAddToCart(e, item)} className="add-btn">
@@ -78,10 +88,8 @@ const Favourite = ({ favorites = [], toggleFavorite, add }) => {
           ))}
         </div>
       )}
-    </div>
-  )
-}
+    </section>
+  );
+};
 
-export default Favourite;
-
-
+export default SearchResults;
