@@ -1,0 +1,62 @@
+.upload-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.upload-modal-card {
+  background: #ffffff;
+  width: 90%;
+  max-width: 480px;
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+.upload-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.upload-form .form-group {
+  margin-bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.upload-form label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.upload-form input,
+.upload-form select,
+.upload-form textarea {
+  padding: 10px 14px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  font-family: inherit;
+}
+
+.upload-form input:focus,
+.upload-form select:focus,
+.upload-form textarea:focus {
+  border-color: #ff6b00;
+}

@@ -41,3 +41,17 @@ ul {
   width: 100%;
   padding: 0 40px;
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 12px;
+  }
+}

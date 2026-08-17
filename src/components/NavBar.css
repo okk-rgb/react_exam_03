@@ -45,3 +45,17 @@
 .nav-more-btn:hover {
   background-color: var(--light-gray-bg);
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .nav-list {
+    gap: 14px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .navbar {
+    display: none;
+  }
+}

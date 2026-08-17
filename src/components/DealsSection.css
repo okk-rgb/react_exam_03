@@ -264,3 +264,43 @@
 .favorite-btn.active {
   color: crimson;   
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .deals-section {
+    padding: 20px;
+  }
+  .deals-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .section-title {
+    font-size: 24px;
+  }
+  .deal-card {
+    height: 320px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .deals-section {
+    padding: 16px;
+  }
+  .deals-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .deal-card {
+    height: 300px;
+  }
+  .section-title {
+    font-size: 20px;
+  }
+  .price {
+    font-size: 20px;
+  }
+  .category {
+    font-size: 16px;
+  }
+}

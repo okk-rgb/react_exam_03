@@ -34,3 +34,31 @@
   background-color: #0ebd5a;
   color: white;
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .floating-actions {
+    bottom: 20px;
+    right: 20px;
+    gap: 12px;
+  }
+  .float-btn {
+    width: 52px;
+    height: 52px;
+    font-size: 22px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .floating-actions {
+    bottom: 16px;
+    right: 16px;
+    gap: 10px;
+  }
+  .float-btn {
+    width: 46px;
+    height: 46px;
+    font-size: 20px;
+  }
+}

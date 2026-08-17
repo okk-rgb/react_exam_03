@@ -1,0 +1,102 @@
+.auth-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.auth-modal-card {
+  background: #ffffff;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.close-btn {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #666;
+  cursor: pointer;
+}
+
+.auth-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.auth-form .form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-form label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.auth-form input,
+.auth-form select {
+  padding: 10px 14px;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.auth-form input:focus,
+.auth-form select:focus {
+  border-color: #ff6b00;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: #ff6b00;
+  color: #fff;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+
+.submit-btn:hover {
+  background: #e05d00;
+}
+
+.toggle-mode {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #ff6b00;
+  cursor: pointer;
+  font-weight: 600;
+}

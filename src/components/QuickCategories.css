@@ -66,3 +66,40 @@
 .qc-next-btn:hover {
   background-color: var(--light-gray-bg);
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .quick-categories {
+    gap: 10px;
+  }
+  .qc-item {
+    padding: 10px 14px 10px 10px;
+  }
+  .qc-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .quick-categories-container {
+    margin-bottom: 24px;
+  }
+  .quick-categories {
+    gap: 8px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .quick-categories::-webkit-scrollbar {
+    display: none;
+  }
+  .qc-next-btn {
+    display: none;
+  }
+  .qc-label {
+    font-size: 12px;
+  }
+}

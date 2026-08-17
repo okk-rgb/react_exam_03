@@ -1,17 +1,23 @@
-import React from 'react'
-import HeroBanner from '../../components/HeroBanner'
-import QuickCategories from '../../components/QuickCategories'
-import DealsSection from '../../components/DealsSection'
+import React from 'react';
+import HeroBanner from '../../components/HeroBanner';
+import QuickCategories from '../../components/QuickCategories';
+import DealsSection from '../../components/DealsSection';
 
-const Home = ({ add, favorites, toggleFavorite }) => {
+const Home = ({ add, favorites, toggleFavorite, onOpenUpload, onOpenAuth, user }) => {
   return (
     <div>
-      <HeroBanner />
+      <HeroBanner add={add} onOpenAuth={onOpenAuth} />
       <QuickCategories />
-      <DealsSection childAdd={add} favorites={favorites} toggleFavorite={toggleFavorite} />
+      <DealsSection
+        add={add}
+        favorites={favorites}
+        toggleFavorite={toggleFavorite}
+        onOpenUpload={onOpenUpload}
+        onOpenAuth={onOpenAuth}
+        user={user}
+      />
     </div>
-  )
-}
+  );
+};
 
-
-export default Home
+export default Home;

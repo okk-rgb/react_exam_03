@@ -54,3 +54,25 @@
   object-fit: cover;
   border: 1px solid #ddd;
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .topbar-inner {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .topbar-left, .topbar-right {
+    gap: 12px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .topbar-right {
+    display: none;
+  }
+  .topbar-left {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

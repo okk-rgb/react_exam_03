@@ -42,3 +42,25 @@
   font-weight: 500;
   text-decoration: none;
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .fav-title {
+    font-size: 22px;
+    margin-bottom: 40px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .fav-container {
+    padding: 14px 0 40px;
+  }
+  .fav-title {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+  .empty-fav-title {
+    font-size: 20px;
+  }
+}

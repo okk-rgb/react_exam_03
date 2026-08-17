@@ -1,72 +1,173 @@
-.hero-banner {
-  width: 100%;
-  height: 320px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #ff8c00, #ffb300);
+.hero-swiper-container {
   position: relative;
+  width: 100%;
+  height: 380px;
+  border-radius: 24px;
   overflow: hidden;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.swiper-slide-item {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 60px;
-  margin-bottom: 24px;
+  padding: 0 50px;
+  transition: all 0.6s ease-in-out;
 }
 
-.banner-content {
-  z-index: 2;
-  color: white;
-}
-
-.banner-title {
-  font-size: 52px;
-  font-weight: 800;
-  line-height: 1.1;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-  margin-bottom: 16px;
-  font-style: italic;
+.slide-content {
+  max-width: 550px;
+  color: #ffffff;
 }
 
 .banner-badge {
   display: inline-block;
-  background: white;
-  color: var(--primary-orange);
-  padding: 8px 16px;
-  border-radius: 12px 12px 12px 0;
-  font-weight: bold;
-  font-size: 18px;
+  background: #ff6b00;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.banner-center {
+.banner-title {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.highlight-orange {
+  color: #ff9100;
+}
+
+.slide-desc {
+  font-size: 15px;
+  color: #cbd5e1;
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.slide-actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.buy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 28px;
+  background: #ff6b00;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.4);
+}
+
+.buy-btn:hover {
+  background: #e05d00;
+  transform: translateY(-2px);
+}
+
+.catalog-link-btn {
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.25s;
+}
+
+.catalog-link-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.swiper-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 10;
+}
+
+.swiper-nav-btn:hover {
+  background: #ff6b00;
+  border-color: #ff6b00;
+}
+
+.swiper-nav-btn.prev {
+  left: 20px;
+}
+
+.swiper-nav-btn.next {
+  right: 20px;
+}
+
+.swiper-pagination-dots {
   position: absolute;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
   z-index: 10;
 }
 
-.buy-btn {
-  background-color: #0ebd5a; 
-  color: white;
-  font-size: 26px;
-  font-weight: 800;
-  padding: 10px 48px;
-  border-radius: 30px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  transition: transform 0.2s;
-}
-.buy-btn:hover {
-  transform: scale(1.03);
+.swiper-pagination-dots .dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
-.right-title {
-  text-align: right;
-  margin-top: 40px;
+.swiper-pagination-dots .dot.active {
+  width: 32px;
+  border-radius: 10px;
+  background: #ff6b00;
 }
 
-.highlight-red {
-  background-color: #e50914;
-  padding: 0 16px;
-  border-radius: 12px;
-  display: inline-block;
-  font-style: normal;
+@media (max-width: 768px) {
+  .hero-swiper-container {
+    height: 320px;
+  }
+  .swiper-slide-item {
+    padding: 0 24px;
+  }
+  .banner-title {
+    font-size: 24px;
+  }
+  .slide-desc {
+    display: none;
+  }
 }

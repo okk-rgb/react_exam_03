@@ -44,3 +44,28 @@
 .no-results .home-btn:hover {
   background: #e56d00;
 }
+
+/* ── Tablet ── */
+@media (max-width: 768px) {
+  .search-results-section {
+    padding: 20px;
+  }
+  .search-results-title {
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+  .search-results-section {
+    padding: 14px;
+  }
+  .search-results-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  .no-results h3 {
+    font-size: 18px;
+  }
+}
