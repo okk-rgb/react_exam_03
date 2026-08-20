@@ -3,10 +3,10 @@ import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { productApi, cartApi } from '../services/api';
 import Swal from 'sweetalert2';
 import { FaHeart } from 'react-icons/fa';
-import { FiHeart, FiShoppingBag } from 'react-icons/fi';
+import { FiHeart, FiShoppingBag, FiTrash2 } from 'react-icons/fi';
 import './SearchResults.css';
 
-const SearchResults = ({ add, favorites, toggleFavorite, onOpenAuth }) => {
+const SearchResults = ({ add, favorites, toggleFavorite, onOpenAuth, user }) => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   const [filteredCards, setFilteredCards] = useState([]);
@@ -39,6 +39,35 @@ const SearchResults = ({ add, favorites, toggleFavorite, onOpenAuth }) => {
     add(item);
   };
 
+  const handleDelete = async (e, id) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    Swal.fire({
+      title: 'Mahsulotni o‘chirmoqchimisiz?',
+      text: 'Ushbu amalni ortga qaytarib bo‘lmaydi!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ha, o‘chirish',
+      cancelButtonText: 'Bekor qilish',
+      confirmButtonColor: '#d33',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await productApi.delete(id);
+          if (res.success) {
+            Swal.fire('O‘chirildi!', 'Mahsulot muvaffaqiyatli o‘chirildi.', 'success');
+            setFilteredCards((prev) => prev.filter((item) => item.id !== id));
+          } else {
+            Swal.fire('Xatolik', res.message || 'O‘chirishda xatolik', 'error');
+          }
+        } catch (err) {
+          Swal.fire('Xatolik', 'Server bilan bog‘lanishda xatolik', 'error');
+        }
+      }
+    });
+  };
+
   const handleBuyNow = async (e, item) => {
     e.preventDefault();
     e.stopPropagation();
@@ -59,13 +88,39 @@ const SearchResults = ({ add, favorites, toggleFavorite, onOpenAuth }) => {
       return;
     }
 
-    try {
-      await cartApi.addToCart(item.id, 1);
-      navigate('/cart');
-    } catch (err) {
-      Swal.fire('Xatolik', 'Savatga qo‘shishda xatolik', 'error');
+    const { value: location } = await Swal.fire({
+      title: 'Yetkazib berish manzilini kiriting',
+      input: 'text',
+      inputLabel: 'Yetkazib berish manzili',
+      inputPlaceholder: 'Masalan: Toshkent sh., Chilonzor t., 10-mavze, 5-uy',
+      showCancelButton: true,
+      confirmButtonText: 'Sotib olish',
+      cancelButtonText: 'Bekor qilish',
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return 'Iltimos, yetkazib berish manzilini kiriting!';
+        }
+      },
+    });
+
+    if (location) {
+      try {
+        await cartApi.addToCart(item.id, 1);
+        const res = await cartApi.buy(location);
+        if (res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Xarid muvaffaqiyatli amalga oshirildi!',
+            html: `<b>Buyurtma kodi:</b> ${res.receipt.order_id}<br/><b>Yetkazib berish manzili:</b> ${res.receipt.delivery_location}<br/><b>Jami summasi:</b> $${res.receipt.total_price}`,
+          });
+        }
+      } catch (err) {
+        Swal.fire('Xatolik', 'Savatga qo‘shish yoki xarid qilishda xatolik', 'error');
+      }
     }
   };
+
+  const isSellerOrAdmin = user && (user.role === 'seller' || user.role === 'admin');
 
   return (
     <section className="search-results-section">
@@ -96,6 +151,35 @@ const SearchResults = ({ add, favorites, toggleFavorite, onOpenAuth }) => {
                 >
                   {isFavorite(item) ? <FaHeart /> : <FiHeart />}
                 </button>
+
+                {/* Delete Button for Seller / Admin */}
+                {isSellerOrAdmin && (
+                  <button
+                    className="delete-btn"
+                    onClick={(e) => handleDelete(e, item.id)}
+                    title="Mahsulotni o'chirish"
+                    style={{
+                      position: 'absolute',
+                      top: '12px',
+                      left: '12px',
+                      background: '#ef4444',
+                      color: '#fff',
+                      border: 'none',
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      zIndex: 2,
+                      fontSize: '14px',
+                      boxShadow: '0 2px 8px rgba(239, 68, 68, 0.4)',
+                    }}
+                  >
+                    <FiTrash2 />
+                  </button>
+                )}
 
                 {/* Product Image */}
                 <div className="card-img">

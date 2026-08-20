@@ -8,7 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_jwt_token_key_2026';
 
 export const register = async (req, res, next) => {
   try {
-    const { user_name, user_password, user_number, role } = req.body;
+    const { user_name, user_password, user_number, role, hash } = req.body;
 
     const existingUser = await User.findOne({ where: { user_name } });
     if (existingUser) {
@@ -21,6 +21,7 @@ export const register = async (req, res, next) => {
       user_password: hashedPassword,
       user_number,
       role: role || 'user',
+      hash: hash || null,
     });
 
     const token = jwt.sign(
@@ -38,6 +39,7 @@ export const register = async (req, res, next) => {
         user_name: newUser.user_name,
         user_number: newUser.user_number,
         role: newUser.role,
+        hash: newUser.hash,
       },
     });
   } catch (error) {
@@ -74,9 +76,11 @@ export const login = async (req, res, next) => {
         user_name: user.user_name,
         user_number: user.user_number,
         role: user.role,
+        hash: user.hash,
       },
     });
   } catch (error) {
+    console.error('Login error:', error.message);
     next(error);
   }
 };

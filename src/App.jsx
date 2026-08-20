@@ -151,12 +151,28 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    setUser(null);
-    setAddCart([]);
-    setFavorites([]);
-    Swal.fire('Chiqildi', 'Tizimdan muvaffaqiyatli chiqdingiz', 'info');
+    Swal.fire({
+      title: 'Rostdan ham chiqmoqchimisiz?',
+      text: 'Are you sure?',
+      imageUrl: 'https://media1.tenor.com/m/M6LgK4Y5Y2MAAAAC/omni-man-are-you-sure.gif',
+      imageWidth: 380,
+      imageHeight: 240,
+      imageAlt: 'Omni Man Are You Sure GIF',
+      showCancelButton: true,
+      confirmButtonText: 'Ha',
+      cancelButtonText: 'Yo‘q',
+      confirmButtonColor: '#ef4444',
+      cancelButtonColor: '#64748b',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+        setAddCart([]);
+        setFavorites([]);
+        Swal.fire('Chiqildi', 'Tizimdan muvaffaqiyatli chiqdingiz', 'info');
+      }
+    });
   };
 
   return (
@@ -215,6 +231,7 @@ function App() {
                 favorites={favorites}
                 toggleFavorite={toggleFavorite}
                 onOpenAuth={() => setIsAuthOpen(true)}
+                user={user}
               />
             }
           />
@@ -226,6 +243,7 @@ function App() {
                 favorites={favorites}
                 toggleFavorite={toggleFavorite}
                 onOpenAuth={() => setIsAuthOpen(true)}
+                user={user}
               />
             }
           />

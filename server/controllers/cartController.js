@@ -146,6 +146,7 @@ export const getCartTotal = async (req, res, next) => {
 export const buyCart = async (req, res, next) => {
   try {
     const user_id = req.user.id;
+    const { location } = req.body || {};
     const cartItems = await CartInfo.findAll({
       where: { user_id },
       include: [{ model: Card, as: 'card' }],
@@ -176,6 +177,7 @@ export const buyCart = async (req, res, next) => {
         order_id: `ORD-${Date.now()}`,
         total_items: totalItems,
         total_price: Number(totalPrice.toFixed(2)),
+        delivery_location: location || 'Toshkent sh., O\'zbekiston',
         purchased_at: new Date().toISOString(),
       },
     });

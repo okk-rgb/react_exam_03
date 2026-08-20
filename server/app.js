@@ -49,8 +49,8 @@ const initDatabase = async () => {
     await sequelize.authenticate();
     console.log('PostgreSQL Database connected successfully via Sequelize.');
 
-    // Auto-create/sync tables
-    await sequelize.sync({ alter: true });
+    // Auto-create/sync tables (drop:false prevents PostgreSQL ENUM "already exists" error on restart)
+    await sequelize.sync({ alter: { drop: false } });
     console.log('Database tables synchronized.');
 
     // Seed default categories if empty

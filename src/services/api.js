@@ -123,10 +123,11 @@ export const cartApi = {
     });
     return res.json();
   },
-  buy: async () => {
+  buy: async (location = '') => {
     const res = await fetch(`${API_BASE_URL}/cart/buy`, {
       method: 'POST',
       headers: getAuthHeaders(),
+      body: JSON.stringify({ location }),
     });
     return res.json();
   },

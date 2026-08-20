@@ -4,9 +4,9 @@ import { productApi, cartApi } from '../services/api';
 import Swal from 'sweetalert2';
 import './CradInfo.css';
 import { FaHeart } from 'react-icons/fa';
-import { FiHeart, FiShoppingBag } from 'react-icons/fi';
+import { FiHeart, FiShoppingBag, FiTrash2 } from 'react-icons/fi';
 
-const CradInfo = ({ add, favorites = [], toggleFavorite, onOpenAuth }) => {
+const CradInfo = ({ add, favorites = [], toggleFavorite, onOpenAuth, user }) => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -43,6 +43,33 @@ const CradInfo = ({ add, favorites = [], toggleFavorite, onOpenAuth }) => {
   }
 
   const isFav = favorites.some((fav) => fav.id === product.id);
+  const isSellerOrAdmin = user && (user.role === 'seller' || user.role === 'admin');
+
+  const handleDelete = async () => {
+    Swal.fire({
+      title: 'Mahsulotni o‘chirmoqchimisiz?',
+      text: 'Ushbu amalni ortga qaytarib bo‘lmaydi!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ha, o‘chirish',
+      cancelButtonText: 'Bekor qilish',
+      confirmButtonColor: '#d33',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const res = await productApi.delete(product.id);
+          if (res.success) {
+            Swal.fire('O‘chirildi!', 'Mahsulot muvaffaqiyatli o‘chirildi.', 'success');
+            navigate('/');
+          } else {
+            Swal.fire('Xatolik', res.message || 'O‘chirishda xatolik', 'error');
+          }
+        } catch (err) {
+          Swal.fire('Xatolik', 'Server bilan bog‘lanishda xatolik', 'error');
+        }
+      }
+    });
+  };
 
   const handleBuyNow = async () => {
     const token = localStorage.getItem('token');
@@ -62,11 +89,35 @@ const CradInfo = ({ add, favorites = [], toggleFavorite, onOpenAuth }) => {
       return;
     }
 
-    try {
-      await cartApi.addToCart(product.id, 1);
-      navigate('/cart');
-    } catch (err) {
-      Swal.fire('Xatolik', 'Savatga qo‘shishda xatolik', 'error');
+    const { value: location } = await Swal.fire({
+      title: 'Yetkazib berish manzilini kiriting',
+      input: 'text',
+      inputLabel: 'Yetkazib berish manzili',
+      inputPlaceholder: 'Masalan: Toshkent sh., Chilonzor t., 10-mavze, 5-uy',
+      showCancelButton: true,
+      confirmButtonText: 'Sotib olish',
+      cancelButtonText: 'Bekor qilish',
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return 'Iltimos, yetkazib berish manzilini kiriting!';
+        }
+      },
+    });
+
+    if (location) {
+      try {
+        await cartApi.addToCart(product.id, 1);
+        const res = await cartApi.buy(location);
+        if (res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Xarid muvaffaqiyatli amalga oshirildi!',
+            html: `<b>Buyurtma kodi:</b> ${res.receipt.order_id}<br/><b>Yetkazib berish manzili:</b> ${res.receipt.delivery_location}<br/><b>Jami summasi:</b> $${res.receipt.total_price}`,
+          });
+        }
+      } catch (err) {
+        Swal.fire('Xatolik', 'Savatga qo‘shish yoki xarid qilishda xatolik', 'error');
+      }
     }
   };
 
@@ -96,7 +147,7 @@ const CradInfo = ({ add, favorites = [], toggleFavorite, onOpenAuth }) => {
           </p>
         )}
 
-        <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '15px', alignItems: 'center', flexWrap: 'wrap' }}>
           <button onClick={() => add(product)} className="cart-btn" style={{ flex: 1 }}>
             Savatga qo'shish
           </button>
@@ -122,6 +173,29 @@ const CradInfo = ({ add, favorites = [], toggleFavorite, onOpenAuth }) => {
           >
             <FiShoppingBag /> Sotib olish (Buy Now)
           </button>
+
+          {isSellerOrAdmin && (
+            <button
+              onClick={handleDelete}
+              style={{
+                height: '56px',
+                padding: '0 20px',
+                borderRadius: '12px',
+                border: 'none',
+                background: '#ef4444',
+                color: '#ffffff',
+                fontSize: '15px',
+                fontWeight: '700',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 14px rgba(239, 68, 68, 0.3)',
+              }}
+            >
+              <FiTrash2 /> O'chirish
+            </button>
+          )}
 
           <button
             onClick={() => toggleFavorite(product)}

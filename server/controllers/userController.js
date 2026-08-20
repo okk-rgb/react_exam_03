@@ -29,7 +29,7 @@ export const getUserById = async (req, res, next) => {
 
 export const createUser = async (req, res, next) => {
   try {
-    const { user_name, user_password, user_number, role } = req.body;
+    const { user_name, user_password, user_number, role, hash } = req.body;
     const existing = await User.findOne({ where: { user_name } });
     if (existing) {
       return res.status(400).json({ success: false, message: 'Username is already taken' });
@@ -41,6 +41,7 @@ export const createUser = async (req, res, next) => {
       user_password: hashedPassword,
       user_number,
       role: role || 'user',
+      hash: hash || null,
     });
 
     res.status(201).json({
@@ -51,6 +52,7 @@ export const createUser = async (req, res, next) => {
         user_name: newUser.user_name,
         user_number: newUser.user_number,
         role: newUser.role,
+        hash: newUser.hash,
       },
     });
   } catch (error) {
@@ -65,7 +67,7 @@ export const updateUser = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'User not found' });
     }
 
-    const { user_name, user_password, user_number, role } = req.body;
+    const { user_name, user_password, user_number, role, hash } = req.body;
     if (user_name && user_name !== user.user_name) {
       const existing = await User.findOne({ where: { user_name } });
       if (existing) {
@@ -79,6 +81,7 @@ export const updateUser = async (req, res, next) => {
     }
     if (user_number !== undefined) user.user_number = user_number;
     if (role) user.role = role;
+    if (hash !== undefined) user.hash = hash;
 
     await user.save();
 
@@ -90,6 +93,7 @@ export const updateUser = async (req, res, next) => {
         user_name: user.user_name,
         user_number: user.user_number,
         role: user.role,
+        hash: user.hash,
       },
     });
   } catch (error) {

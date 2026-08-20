@@ -5,6 +5,7 @@ export const createUserSchema = Joi.object({
   user_password: Joi.string().min(4).max(100).required(),
   user_number: Joi.string().allow('', null).optional(),
   role: Joi.string().valid('user', 'seller', 'admin').default('user'),
+  hash: Joi.string().allow('', null).optional(),
 });
 
 export const updateUserSchema = Joi.object({
@@ -12,4 +13,5 @@ export const updateUserSchema = Joi.object({
   user_password: Joi.string().min(4).max(100).optional(),
   user_number: Joi.string().allow('', null).optional(),
   role: Joi.string().valid('user', 'seller', 'admin').optional(),
+  hash: Joi.string().allow('', null).optional(),
 });

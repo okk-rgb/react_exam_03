@@ -11,6 +11,7 @@ export const registerSchema = Joi.object({
   }),
   user_number: Joi.string().allow('', null).optional(),
   role: Joi.string().valid('user', 'seller', 'admin').default('user'),
+  hash: Joi.string().allow('', null).optional(),
 });
 
 export const loginSchema = Joi.object({

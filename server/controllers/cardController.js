@@ -125,8 +125,11 @@ export const deleteCard = async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Card/Product not found' });
     }
 
-    // Check ownership if not admin
-    if (req.user.role !== 'admin' && card.user_id && card.user_id.toString() !== req.user.id.toString()) {
+    // Check ownership if not admin or seller
+    const isOwner = card.user_id && card.user_id.toString() === req.user.id.toString();
+    const isSellerOrAdmin = req.user.role === 'seller' || req.user.role === 'admin';
+
+    if (!isSellerOrAdmin && !isOwner) {
       return res.status(403).json({ success: false, message: 'Forbidden: You can only delete your own products' });
     }
 

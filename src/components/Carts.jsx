@@ -86,30 +86,40 @@ const Carts = ({ carts = [], remove, onOpenAuth }) => {
       return;
     }
 
-    Swal.fire({
-      title: 'Xaridni tasdiqlaysizmi?',
-      text: `Jami to'lov: ${totalPrice.toLocaleString()} $`,
-      icon: 'question',
+    const { value: location } = await Swal.fire({
+      title: 'Yetkazib berish manzilini kiriting',
+      input: 'text',
+      inputLabel: 'Yetkazib berish manzili',
+      inputPlaceholder: 'Masalan: Toshkent sh., Chilonzor t., 10-mavze, 5-uy',
       showCancelButton: true,
       confirmButtonText: 'Sotib olish',
       cancelButtonText: 'Bekor qilish',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          const res = await cartApi.buy();
-          if (res.success) {
-            Swal.fire('Xarid amalga oshirildi!', `Buyurtma kodi: ${res.receipt.order_id}`, 'success');
-            setCartItems([]);
-            setTotalPrice(0);
-            setTotalItems(0);
-          } else {
-            Swal.fire('Xatolik', res.message || 'Xarid jarayonida xatolik', 'error');
-          }
-        } catch (err) {
-          Swal.fire('Xatolik', 'Server bilan bog‘lanishda xatolik', 'error');
+      inputValidator: (value) => {
+        if (!value || !value.trim()) {
+          return 'Iltimos, yetkazib berish manzilini kiriting!';
         }
-      }
+      },
     });
+
+    if (location) {
+      try {
+        const res = await cartApi.buy(location);
+        if (res.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Xarid muvaffaqiyatli amalga oshirildi!',
+            html: `<b>Buyurtma kodi:</b> ${res.receipt.order_id}<br/><b>Yetkazib berish manzili:</b> ${res.receipt.delivery_location}<br/><b>Jami summasi:</b> $${res.receipt.total_price}`,
+          });
+          setCartItems([]);
+          setTotalPrice(0);
+          setTotalItems(0);
+        } else {
+          Swal.fire('Xatolik', res.message || 'Xarid jarayonida xatolik', 'error');
+        }
+      } catch (err) {
+        Swal.fire('Xatolik', 'Server bilan bog‘lanishda xatolik', 'error');
+      }
+    }
   };
 
   // Render combined or fallback local items if logged out
@@ -145,8 +155,8 @@ const Carts = ({ carts = [], remove, onOpenAuth }) => {
             {displayItems.map((item, index) => {
               const cardData = item.card || item;
               const itemId = item.id;
-              const imgUrl = cardData.thumbnail || cardData.img || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500';
-              const name = cardData.item_name || cardData.name || 'Mahsulot';
+              const imgUrl = cardData.thumbnail || cardData.img || cardData.url || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500';
+              const name = cardData.item_name || cardData.name || cardData.title || 'Mahsulot';
               const price = parseFloat(cardData.price) || 0;
               const qty = item.quantity || 1;
 
